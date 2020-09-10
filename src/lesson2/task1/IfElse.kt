@@ -3,6 +3,8 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -72,7 +74,8 @@ fun ageDescription(age: Int): String {
    return when {
         age % 100 in 10..20 -> "$age лет"
         age % 10 in 2..4 -> "$age года"
-        age % 10 in 5..0 -> "$age лет"
+        age % 10 in 5..9 -> "$age лет"
+       age % 10 == 0 -> "$age лет"
         else -> "$age год"
     }
 }
@@ -116,7 +119,7 @@ fun whichRookThreatens(
 ): Int {
     return when {
         rookX1 != kingX && rookX2 != kingX && rookY1 != kingY && rookY2 != kingY -> 0
-        rookX1 == kingX || rookY1 == kingY && rookX2 == kingX || rookY2 == kingY -> 3
+        (rookX1 == kingX || rookY1 == kingY) && (rookX2 == kingX || rookY2 == kingY) -> 3
         rookX1 == kingX || rookY1 == kingY -> 1
         else -> 2
     }
@@ -138,8 +141,8 @@ fun rookOrBishopThreatens(
     bishopX: Int, bishopY: Int
 ): Int {
     return when {
-        rookX != kingX && rookY != kingY && kingX - bishopX != kingY - bishopY -> 0
-        rookX == kingX || rookY == kingY && kingX - bishopX == kingY - bishopY -> 3
+        rookX != kingX && rookY != kingY && abs(kingX - bishopX) != abs(kingY - bishopY) -> 0
+        (rookX == kingX || rookY == kingY) && (abs(kingX - bishopX) == abs(kingY - bishopY)) -> 3
         rookX == kingX || rookY == kingY -> 1
         else -> 2
     }
@@ -153,7 +156,19 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    if ((a != 0.0) && (b != 0.0) && (c != 0.0) && (a + b > c) && (a + c > b) && (c + b > a)) {
+        val cosA = (sqr(a) + sqr(b) - sqr(c)) / (2.0 * b * a)
+        val cosB = (sqr(c) + sqr(a) - sqr(b)) / (2.0 * a * c)
+        val cosC = (sqr(c) + sqr(b) - sqr(a)) / (2.0 * b * c)
+    return when {
+        (cosA == 0.0) || (cosB == 0.0) || (cosC == 0.0) -> 1
+        (cosA > 0.0) && (cosB > 0.0) && (cosC > 0.0) -> 0
+        else -> 2
+    }
+    }
+    return -1
+}
 
 /**
  * Средняя (3 балла)
