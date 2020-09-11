@@ -262,6 +262,7 @@ fun isPalindrome(n: Int): Boolean {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun hasDifferentDigits(n: Int): Boolean {
+    if (n / 10 == 0) return false
     var number = n
     var numeral1 = n % 10
     var numeral2 = (n / 10) % 10
