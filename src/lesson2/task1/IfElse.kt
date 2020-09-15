@@ -71,11 +71,11 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String {
-   return when {
+    return when {
         age % 100 in 10..20 -> "$age лет"
         age % 10 in 2..4 -> "$age года"
         age % 10 in 5..9 -> "$age лет"
-       age % 10 == 0 -> "$age лет"
+        age % 10 == 0 -> "$age лет"
         else -> "$age год"
     }
 }
@@ -96,11 +96,11 @@ fun timeForHalfWay(
     val s2 = t2 * v2
     val s3 = t3 * v3
     val s = (s1 + s2 + s3) / 2
-return when {
-    s <= s1 -> s/v1
-    s <= s1 + s2 -> (s - s1) / v2 + t1
-    else -> (s - s1 - s2) / v3 + t1 + t2
-}
+    return when {
+        s <= s1 -> s / v1
+        s <= s1 + s2 -> (s - s1) / v2 + t1
+        else -> (s - s1 - s2) / v3 + t1 + t2
+    }
 }
 
 /**
@@ -117,11 +117,13 @@ fun whichRookThreatens(
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
 ): Int {
+    val rook1Danger = (rookX1 == kingX || rookY1 == kingY)
+    val rook2Danger = (rookX2 == kingX || rookY2 == kingY)
     return when {
-        rookX1 != kingX && rookX2 != kingX && rookY1 != kingY && rookY2 != kingY -> 0
-        (rookX1 == kingX || rookY1 == kingY) && (rookX2 == kingX || rookY2 == kingY) -> 3
-        rookX1 == kingX || rookY1 == kingY -> 1
-        else -> 2
+        rook1Danger && rook2Danger -> 3
+        rook1Danger -> 1
+        rook2Danger -> 2
+        else -> 0
     }
 }
 
@@ -140,11 +142,13 @@ fun rookOrBishopThreatens(
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
 ): Int {
+    val rookDanger = (rookX == kingX || rookY == kingY)
+    val bishopDanger = abs(kingX - bishopX) == abs(kingY - bishopY)
     return when {
-        rookX != kingX && rookY != kingY && abs(kingX - bishopX) != abs(kingY - bishopY) -> 0
-        (rookX == kingX || rookY == kingY) && (abs(kingX - bishopX) == abs(kingY - bishopY)) -> 3
-        rookX == kingX || rookY == kingY -> 1
-        else -> 2
+        bishopDanger && rookDanger -> 3
+        rookDanger -> 1
+        bishopDanger -> 2
+        else -> 0
     }
 }
 
@@ -161,11 +165,11 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
         val cosA = (sqr(a) + sqr(b) - sqr(c)) / (2.0 * b * a)
         val cosB = (sqr(c) + sqr(a) - sqr(b)) / (2.0 * a * c)
         val cosC = (sqr(c) + sqr(b) - sqr(a)) / (2.0 * b * c)
-    return when {
-        (cosA == 0.0) || (cosB == 0.0) || (cosC == 0.0) -> 1
-        (cosA > 0.0) && (cosB > 0.0) && (cosC > 0.0) -> 0
-        else -> 2
-    }
+        return when {
+            (cosA == 0.0) || (cosB == 0.0) || (cosC == 0.0) -> 1
+            (cosA > 0.0) && (cosB > 0.0) && (cosC > 0.0) -> 0
+            else -> 2
+        }
     }
     return -1
 }
@@ -179,11 +183,12 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    if ((c <= b) || (a <= d)) {
-    if ((c in a..b) && (d in a..b)) return (d - c)
-    if ((c in a..b) && (d !in a..b)) return (b - c)
-    if ((c !in a..b) && (d in a..b)) return (d - a)
-    if ((a in c..d) && (b in c..b)) return (b - a)
-    if ((c > b) || (a > d)) return (-1)
+    if ((c <= b) || (a <= d)) when {
+        (c in a..b) && (d in a..b) -> (d - c)
+        (c in a..b) && (d !in a..b) -> (b - c)
+        (c !in a..b) && (d in a..b) -> (d - a)
+        (a in c..d) && (b in c..b) -> (b - a)
+        (c > b) || (a > d) -> (-1)
+    }
+    return -1
 }
-    return -1 }
