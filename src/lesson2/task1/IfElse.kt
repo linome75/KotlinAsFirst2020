@@ -6,6 +6,7 @@ import lesson1.task1.discriminant
 import lesson1.task1.sqr
 import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sqrt
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
@@ -161,7 +162,7 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    if ((a != 0.0) && (b != 0.0) && (c != 0.0) && (a + b > c) && (a + c > b) && (c + b > a)) {
+    if (a != 0.0 && b != 0.0 && c != 0.0 && a + b > c && a + c > b && c + b > a) {
         val cosA = (sqr(a) + sqr(b) - sqr(c)) / (2.0 * b * a)
         val cosB = (sqr(c) + sqr(a) - sqr(b)) / (2.0 * a * c)
         val cosC = (sqr(c) + sqr(b) - sqr(a)) / (2.0 * b * c)
@@ -183,12 +184,9 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    if ((c <= b) || (a <= d)) when {
-        (c in a..b) && (d in a..b) -> (d - c)
-        (c in a..b) && (d !in a..b) -> (b - c)
-        (c !in a..b) && (d in a..b) -> (d - a)
-        (a in c..d) && (b in c..b) -> (b - a)
-        (c > b) || (a > d) -> (-1)
+    if (c > b || a > d) return -1
+    else {
+    return min(b, d) - max(a, c)
     }
-    return -1
+
 }
