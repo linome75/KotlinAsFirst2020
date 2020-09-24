@@ -133,7 +133,7 @@ fun minDivisor(n: Int): Int {
 fun maxDivisor(n: Int): Int {
     var m = n - 1
     while (n % m != 0) {
-        m -= 1
+        m--
     }
     return m
 }
@@ -171,15 +171,21 @@ fun collatzSteps(x: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
+fun gcd(a: Int, b: Int): Int {
+    var c = 0
+    var b1 = min(a, b)
+    var a1 = max(a, b)
+    while (b1 != 0) {
+        c = a1 % b1;
+        a1 = b1;
+        b1 = c;
+    }
+    return a1;
+}
+
 fun lcm(m: Int, n: Int): Int {
     if ((m == 0) || (n == 0)) return 0
-    var GreatestCommonDivisor = min(m, n)
-    var LeastCommonMultiple = max(m, n)
-    while ((m % GreatestCommonDivisor != 0) || (n % GreatestCommonDivisor != 0)) {
-        GreatestCommonDivisor -= 1
-    }
-    LeastCommonMultiple = (n * m) / GreatestCommonDivisor
-    return LeastCommonMultiple
+    return (n * m) / gcd(m, n)
 }
 
 /**
@@ -192,10 +198,8 @@ fun lcm(m: Int, n: Int): Int {
 fun isCoPrime(m: Int, n: Int): Boolean {
     var divider = min(m, n)
     if ((m % 2 == 0) && (n % 2 == 0)) return false
-    for (i in 3..divider) {
-        if ((m % i == 0) && (n % i == 0)) return false
-    }
-    return true
+    if (gcd(m, n) == 1) return true
+    return false
 }
 
 /**
@@ -209,7 +213,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
     var sqrtM = sqrt(m.toDouble()).toInt()
     var sqrtN = sqrt(n.toDouble()).toInt()
     for (i in sqrtM..sqrtN) {
-        if ((i*i >= m) && (i*i <= n)) return true
+        if ((i * i >= m) && (i * i <= n)) return true
     }
     return false
 }
@@ -226,7 +230,7 @@ fun revert(n: Int): Int {
     var count = 0
     var result = 0
     if (number / 10 == 0) return n
-    while (number != 0){
+    while (number != 0) {
         result = (number % 10) + result * 10
         number /= 10
     }
@@ -246,12 +250,13 @@ fun isPalindrome(n: Int): Boolean {
     var number = n
     var count = 0
     var result = 0
-    while (number != 0){
+    while (number != 0) {
         result = (number % 10) + result * 10
-        number /= 10}
-    if (result == n) return true
-    else return false
+        number /= 10
     }
+    if (result == n) return true
+    return false
+}
 
 /**
  * Средняя (3 балла)
@@ -305,12 +310,16 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int) {
+fun squareSequenceDigit(n: Int): Int {
     var number = 1
     var count = 1
-    while (n != 0) {
-
+    while (count < n) {
+        number++
+        count += digitNumber(number * number)
     }
+    var answer = number * number
+    for (i in 1..count - n) answer /= 10
+    return answer % 10
 }
 
 /**
@@ -322,4 +331,15 @@ fun squareSequenceDigit(n: Int) {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var number = 1
+    var count = 1
+    while (count < n) {
+        number++
+        count += digitNumber(fib(number))
+    }
+    var answer = fib(number)
+    for (i in 1..count - n) answer /= 10
+    return answer % 10
+}
+
