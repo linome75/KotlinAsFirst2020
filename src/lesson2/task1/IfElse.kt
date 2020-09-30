@@ -186,7 +186,7 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     if (c > b || a > d) return -1
     else {
-    return min(b, d) - max(a, c)
+        return min(b, d) - max(a, c)
     }
 
 }
