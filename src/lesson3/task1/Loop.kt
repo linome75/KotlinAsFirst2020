@@ -196,10 +196,8 @@ fun lcm(m: Int, n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    var divider = min(m, n)
     if ((m % 2 == 0) && (n % 2 == 0)) return false
-    if (gcd(m, n) == 1) return true
-    return false
+    return gcd(m, n) == 1
 }
 
 /**
@@ -210,8 +208,8 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    var sqrtM = sqrt(m.toDouble()).toInt()
-    var sqrtN = sqrt(n.toDouble()).toInt()
+    val sqrtM = sqrt(m.toDouble()).toInt()
+    val sqrtN = sqrt(n.toDouble()).toInt()
     for (i in sqrtM..sqrtN) {
         if ((i * i >= m) && (i * i <= n)) return true
     }
@@ -254,8 +252,7 @@ fun isPalindrome(n: Int): Boolean {
         result = (number % 10) + result * 10
         number /= 10
     }
-    if (result == n) return true
-    return false
+    return result == n
 }
 
 /**
@@ -269,10 +266,10 @@ fun isPalindrome(n: Int): Boolean {
 fun hasDifferentDigits(n: Int): Boolean {
     if (n / 10 == 0) return false
     var number = n
-    var numeral1 = n % 10
+    val numeral1 = n % 10
     var numeral2 = (n / 10) % 10
     while (number > 0) {
-        number = number / 100
+        number /= 100
         if (numeral1 != numeral2) return true
         else numeral2 = number % 10
     }
