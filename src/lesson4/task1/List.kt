@@ -3,6 +3,8 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.digitNumber
+import lesson3.task1.minDivisor
 import java.lang.Math.pow
 import kotlin.math.sqrt
 
@@ -186,7 +188,14 @@ fun polynom(p: List<Int>, x: Int): Int {
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
+fun accumulate(list: MutableList<Int>): MutableList<Int> {
+    if (list.isNotEmpty()) {
+        for (i in 1 until list.size) {
+            list[i] += list[i - 1]
+        }
+    }
+    return list
+}
 
 /**
  * Средняя (3 балла)
@@ -204,7 +213,17 @@ fun factorize(n: Int): List<Int> = TODO()
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String {
+    var num = n
+    var i = 0
+    val result = mutableListOf<Int>()
+    while (num > 1) {
+        result[i] = minDivisor(num)
+        i++
+        num /= minDivisor(num)
+    }
+    return (result.joinToString(separator = "*"))
+}
 
 /**
  * Средняя (3 балла)
@@ -268,4 +287,47 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun three(n: Int): MutableList<String> {
+    var num = n
+    val hundreds = listOf<String>(
+        "сто", "двести", "триста", "четыреста",
+        "пятьсот", "шестьсот", "семьсот",
+        "восемьсот", "девятьсот"
+    )
+    val units = listOf<String>(
+        "один", "два", "три", "четыре",
+        "пять", "шесть", "семь", "восемь", "девять"
+    )
+    val tens = listOf<String>(
+        "десять", "двадцать", "тридцать",
+        "сорок", "пятьдесят", "шестьдесят",
+        "семьдесят", "восемьдесят", "девяноста"
+    )
+    val from11To19 = listOf<String>(
+        "одиннадцать", "двенадцать", "тринадцать",
+        "четырнадцать", "пятнадцать", "шестнадцать",
+        "семнадцать", "восемнадцать", "девятнадцать"
+    )
+    val result = mutableListOf<String>()
+    if (num / 100 > 0) result.add(hundreds[n / 100 - 1])
+    if (num % 100 in 11..19) result.add(from11To19[num % 100 - 11])
+    else {
+        result.add(tens[num % 100 / 10 - 1])
+        result.add(units[num % 10 - 1])
+    }
+    return (result)
+}
+fun russian(n: Int): String {
+    val result = mutableListOf<String>()
+    if (n > 1000) {
+        for (element in three(n/1000)) {
+            result.add(element)
+        }
+        if (result.last() == "один") { result.remove("один")
+        result.add("одна тысяча")}
+    }
+    for (element in three(n%1000)) {
+        result.add(element)
+    }
+    return (result.joinToString())
+}

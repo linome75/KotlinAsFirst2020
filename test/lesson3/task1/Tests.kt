@@ -156,7 +156,6 @@ class Tests {
         assertTrue(isCoPrime(1234567890, 908765431))
         assertTrue(isCoPrime(2109876543, 1234567891))
     }
-
     @Test
     @Tag("3")
     fun squareBetweenExists() {

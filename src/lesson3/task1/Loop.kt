@@ -4,10 +4,13 @@ package lesson3.task1
 
 import lesson1.task1.sqr
 import java.lang.Math.pow
+import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
+import kotlin.random.Random.Default.nextInt
+import kotlin.system.measureTimeMillis
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
