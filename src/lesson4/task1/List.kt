@@ -278,7 +278,35 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+
+fun tr(n: Int, m: Int): String {
+    val RomeNumbers = listOf<String> (
+        "I", "V", "X", "L", "C", "D", "M"
+    )
+    val result = mutableListOf<String>()
+    var num = n
+    when(num){
+        in 1..3 -> {
+            result.add(RomeNumbers[m-1])
+            num -= 1
+            result.add(tr(num, m))}
+        in 5..8 -> {
+            result.add(RomeNumbers[m])
+            num-= 5
+            result.add(tr(num, m))}
+        4 -> result.add(RomeNumbers[m-1]+ RomeNumbers[m])
+        9 -> result.add(RomeNumbers[m-1]+ RomeNumbers[m+1])
+    }
+    return (result.joinToString(separator = ""))
+}
+fun roman(n: Int): String {
+    val result = mutableListOf<String>()
+    result.add(tr(n/1000, 7))
+    result.add(tr(n%1000/100, 5))
+    result.add(tr(n%100/10, 3))
+    result.add(tr(n%10,1))
+    return (result.joinToString(separator = ""))
+}
 
 /**
  * Очень сложная (7 баллов)
@@ -312,8 +340,9 @@ fun three(n: Int): MutableList<String> {
     if (num / 100 > 0) result.add(hundreds[n / 100 - 1])
     if (num % 100 in 11..19) result.add(from11To19[num % 100 - 11])
     else {
-        result.add(tens[num % 100 / 10 - 1])
-        result.add(units[num % 10 - 1])
+        if (num % 100 > 9){
+        result.add(tens[num % 100 / 10 - 1])}
+       if (num % 10 > 0) result.add(units[num % 10 - 1])
     }
     return (result)
 }
@@ -323,11 +352,19 @@ fun russian(n: Int): String {
         for (element in three(n/1000)) {
             result.add(element)
         }
+        if (result.last() == "два") { result.remove("два")
+            result.add("две")}
+        when(n/1000%10){
+            in 2..4 -> {result.add("тысячи")}
+            else -> result.add("тысяч")
+        }
         if (result.last() == "один") { result.remove("один")
         result.add("одна тысяча")}
+
+
     }
     for (element in three(n%1000)) {
         result.add(element)
     }
-    return (result.joinToString())
+    return (result.joinToString(separator = " "))
 }

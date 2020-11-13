@@ -311,8 +311,8 @@ fun cos(x: Double, eps: Double): Double = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var number = 1
-    var count = 1
+    var number = 1 // само число, возводимое в квадрат
+    var count = 1 // счётчик
     while (count < n) {
         number++
         count += digitNumber(number * number)
