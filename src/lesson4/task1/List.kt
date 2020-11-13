@@ -357,6 +357,10 @@ fun russian(n: Int): String {
         for (element in three(n / 1000)) {
             result.add(element)
         }
+        if (result.last() == "один") {
+            result.remove("один")
+            result.add("одна")
+        }
         if (result.last() == "два") {
             result.remove("два")
             result.add("две")
@@ -365,12 +369,10 @@ fun russian(n: Int): String {
             in 2..4 -> {
                 result.add("тысячи")
             }
+            1 -> result.add("тысяча")
             else -> result.add("тысяч")
         }
-        if (result.last() == "один") {
-            result.remove("один")
-            result.add("одна тысяча")
-        }
+
 
 
     }
