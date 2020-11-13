@@ -280,31 +280,34 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  */
 
 fun tr(n: Int, m: Int): String {
-    val RomeNumbers = listOf<String> (
+    val RomeNumbers = listOf<String>(
         "I", "V", "X", "L", "C", "D", "M"
     )
     val result = mutableListOf<String>()
     var num = n
-    when(num){
+    when (num) {
         in 1..3 -> {
-            result.add(RomeNumbers[m-1])
+            result.add(RomeNumbers[m - 1])
             num -= 1
-            result.add(tr(num, m))}
+            result.add(tr(num, m))
+        }
         in 5..8 -> {
             result.add(RomeNumbers[m])
-            num-= 5
-            result.add(tr(num, m))}
-        4 -> result.add(RomeNumbers[m-1]+ RomeNumbers[m])
-        9 -> result.add(RomeNumbers[m-1]+ RomeNumbers[m+1])
+            num -= 5
+            result.add(tr(num, m))
+        }
+        4 -> result.add(RomeNumbers[m - 1] + RomeNumbers[m])
+        9 -> result.add(RomeNumbers[m - 1] + RomeNumbers[m + 1])
     }
     return (result.joinToString(separator = ""))
 }
+
 fun roman(n: Int): String {
     val result = mutableListOf<String>()
-    result.add(tr(n/1000, 7))
-    result.add(tr(n%1000/100, 5))
-    result.add(tr(n%100/10, 3))
-    result.add(tr(n%10,1))
+    result.add(tr(n / 1000, 7))
+    result.add(tr(n % 1000 / 100, 5))
+    result.add(tr(n % 100 / 10, 3))
+    result.add(tr(n % 10, 1))
     return (result.joinToString(separator = ""))
 }
 
@@ -340,30 +343,38 @@ fun three(n: Int): MutableList<String> {
     if (num / 100 > 0) result.add(hundreds[n / 100 - 1])
     if (num % 100 in 11..19) result.add(from11To19[num % 100 - 11])
     else {
-        if (num % 100 > 9){
-        result.add(tens[num % 100 / 10 - 1])}
-       if (num % 10 > 0) result.add(units[num % 10 - 1])
+        if (num % 100 > 9) {
+            result.add(tens[num % 100 / 10 - 1])
+        }
+        if (num % 10 > 0) result.add(units[num % 10 - 1])
     }
     return (result)
 }
+
 fun russian(n: Int): String {
     val result = mutableListOf<String>()
     if (n > 1000) {
-        for (element in three(n/1000)) {
+        for (element in three(n / 1000)) {
             result.add(element)
         }
-        if (result.last() == "два") { result.remove("два")
-            result.add("две")}
-        when(n/1000%10){
-            in 2..4 -> {result.add("тысячи")}
+        if (result.last() == "два") {
+            result.remove("два")
+            result.add("две")
+        }
+        when (n / 1000 % 10) {
+            in 2..4 -> {
+                result.add("тысячи")
+            }
             else -> result.add("тысяч")
         }
-        if (result.last() == "один") { result.remove("один")
-        result.add("одна тысяча")}
+        if (result.last() == "один") {
+            result.remove("один")
+            result.add("одна тысяча")
+        }
 
 
     }
-    for (element in three(n%1000)) {
+    for (element in three(n % 1000)) {
         result.add(element)
     }
     return (result.joinToString(separator = " "))
