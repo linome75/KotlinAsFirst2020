@@ -127,7 +127,23 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    var result = -1
+    val CouplesOfValues = jumps.split(" ")
+    val FiltOfSymb = setOf('+', '%', '-')
+    if (CouplesOfValues.size % 2 == 1) {
+        return -1
+    }
+    for (i in CouplesOfValues.indices step 2) {
+        if ((CouplesOfValues[i].toIntOrNull() == null) || (CouplesOfValues[i + 1].none() { it in FiltOfSymb })) {
+            return -1
+        }
+        if (("+" in CouplesOfValues[i + 1]) && (CouplesOfValues[i].toInt() > result)) {
+            result = CouplesOfValues[i].toInt()
+        }
+    }
+    return result
+}
 
 /**
  * Сложная (6 баллов)
@@ -162,7 +178,22 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше нуля либо равны нулю.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    val list = description.split("; ")
+    var MaxCost = -1.0
+    var Product = ""
+    for (i in list) {
+        val CoupleOfValue = i.split(" ")
+        if (CoupleOfValue.size != 2) return ""
+        val num = CoupleOfValue[1].toDoubleOrNull()
+        if ((num == null) || (num < 0.0)) return ""
+        if (MaxCost < num) {
+            MaxCost = num
+            Product = CoupleOfValue[0]
+        }
+    }
+    return Product
+}
 
 /**
  * Сложная (6 баллов)
