@@ -82,7 +82,22 @@ fun deleteMarked(inputName: String, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val res = mutableMapOf<String, Int>()
+    for (key in substrings.toSet()) res[key] = 0
+    for (line in File(inputName).readLines()) {
+        for (key in substrings.toSet()) {
+            var index = 0
+            var num = line.toLowerCase().indexOf(key.toLowerCase(), index)
+            while (num != -1) {
+                res[key] = res[key]!! + 1
+                index = num + 1
+                num = line.toLowerCase().indexOf(key.toLowerCase(), index)
+            }
+        }
+    }
+    return res
+}
 
 
 /**
@@ -289,7 +304,16 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    writer.write("<html><body>")
+    val glossary = mapOf(
+        "**" to listOf("<b>", "</b>"),
+        "*" to listOf("<i>", "</i>"),
+        "~~" to listOf("<s>", "</s>")
+    )
+    val glsCount = mutableMapOf<String, Int>()
+    for (key in glossary.keys) glsCount[key] = 0
+
 }
 
 /**
