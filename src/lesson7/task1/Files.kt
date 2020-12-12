@@ -331,10 +331,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 writer.write("<p>")
                 parcounter--
             }
-            parcounter--
-            var resline = ""
-            for (i in glossary.keys)
-                if (i in line) resline = corrector(line.split(i), i)
+            var resline = line
+            if ("**" in resline) resline = corrector(resline.split("**"),"**")
         }
         else if (parcounter == 0) {
             writer.write("</p>")
@@ -344,6 +342,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     if (parcounter == 0) writer.write("</p>")
     else if (File(inputName).readText().trim().isEmpty()) writer.write("<p></p>")
     writer.write("</html></body>")
+    writer.close()
 }
 
 /**
