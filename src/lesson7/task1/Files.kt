@@ -305,6 +305,7 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
+    var parcounter = 1
     writer.write("<html><body>")
     val glossary = mapOf(
         "**" to listOf("<b>", "</b>"),
@@ -313,7 +314,36 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     )
     val glsCount = mutableMapOf<String, Int>()
     for (key in glossary.keys) glsCount[key] = 0
-
+    fun corrector(seplines: List<String>, substitute: String) : String {
+        var res = seplines[0]
+        for (i in 1..seplines.size-1) {
+            res += glossary[substitute]!![glsCount[substitute]!!]
+            res += seplines[i]
+            if (glsCount[substitute]!! == 0)
+                glsCount[substitute] = 1
+            else glsCount[substitute] = 0
+        }
+    return res
+    }
+    for (line in File(inputName).readLines()) {
+        if (line.trim().isNotEmpty()) {
+            if (parcounter == 1) {
+                writer.write("<p>")
+                parcounter--
+            }
+            parcounter--
+            var resline = ""
+            for (i in glossary.keys)
+                if (i in line) resline = corrector(line.split(i), i)
+        }
+        else if (parcounter == 0) {
+            writer.write("</p>")
+            parcounter++
+        }
+    }
+    if (parcounter == 0) writer.write("</p>")
+    else if (File(inputName).readText().trim().isEmpty()) writer.write("<p></p>")
+    writer.write("</html></body>")
 }
 
 /**
