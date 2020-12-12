@@ -365,13 +365,19 @@ fun russian(n: Int): String {
             result.remove("два")
             result.add("две")
         }
+        result.add("тысяч")
         when (n / 1000 % 10) {
             in 2..4 -> {
-                result.add("тысячи")
+                if ((n/1000 % 100 < 10) || (n/1000 % 100 > 20)) {
+                result.remove("тысяч")
+                result.add("тысячи") }
             }
-            1 -> result.add("тысяча")
-            else -> result.add("тысяч")
+            1 -> {if ((n/1000 % 100 < 10) || (n/1000 % 100 > 20)){
+                result.remove("тысяч")
+                result.add("тысяча")}
+            }
         }
+
 
 
 
