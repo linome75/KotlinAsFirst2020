@@ -368,17 +368,18 @@ fun russian(n: Int): String {
         result.add("тысяч")
         when (n / 1000 % 10) {
             in 2..4 -> {
-                if ((n/1000 % 100 < 10) || (n/1000 % 100 > 20)) {
-                result.remove("тысяч")
-                result.add("тысячи") }
+                if ((n / 1000 % 100 < 10) || (n / 1000 % 100 > 20)) {
+                    result.remove("тысяч")
+                    result.add("тысячи")
+                }
             }
-            1 -> {if ((n/1000 % 100 < 10) || (n/1000 % 100 > 20)){
-                result.remove("тысяч")
-                result.add("тысяча")}
+            1 -> {
+                if ((n / 1000 % 100 < 10) || (n / 1000 % 100 > 20)) {
+                    result.remove("тысяч")
+                    result.add("тысяча")
+                }
             }
         }
-
-
 
 
     }
