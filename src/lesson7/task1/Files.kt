@@ -309,8 +309,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     writer.write("<html><body>")
     val glossary = mapOf(
         "**" to listOf("<b>", "</b>"),
-        "*" to listOf("<i>", "</i>"),
-        "~~" to listOf("<s>", "</s>")
+        "~~" to listOf("<s>", "</s>"),
+        "*" to listOf("<i>", "</i>")
     )
     val glsCount = mutableMapOf<String, Int>()
     for (key in glossary.keys) glsCount[key] = 0
@@ -332,13 +332,15 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 parcounter--
             }
             var resline = line
-            if ("**" in resline) resline = corrector(resline.split("**"),"**")
-        }
+            if ("**" in resline) resline = corrector(line.split("**"), "**")
+            if ("~~" in resline) resline = corrector(line.split("~~"), "~~")
+            if ("*" in resline) resline = corrector(line.split("*"), "*")
+
+        writer.write(resline)}
         else if (parcounter == 0) {
             writer.write("</p>")
-            parcounter++
+            parcounter++ }
         }
-    }
     if (parcounter == 0) writer.write("</p>")
     else if (File(inputName).readText().trim().isEmpty()) writer.write("<p></p>")
     writer.write("</html></body>")
