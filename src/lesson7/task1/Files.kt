@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import kotlin.math.max
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -166,7 +167,32 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    var longestLine = 0
+    for (line in File(inputName).readLines()) {
+        val sepline = line.trim().split(" ").filter { it.isNotEmpty() }
+        var lenLine = sepline.size - 1
+        for (i in sepline.indices) lenLine += sepline[i].length
+        longestLine = max(longestLine, lenLine)
+    }
+    for (line in File(inputName).readLines()) {
+        val sepline = line.trim().split(" ").filter { it.isNotEmpty() }
+        if (sepline.size > 1) {
+            val firstSpaces = (longestLine - sepline.joinToString(" ").length) / (sepline.size - 1) + 1
+            var secondSpaces = (longestLine - sepline.joinToString(" ").length) % (sepline.size - 1)
+            var resLine = ""
+            for (i in sepline.indices) {
+                if (secondSpaces > 0) {
+                    resLine += sepline[i] + " ".repeat(firstSpaces + 1)
+                    secondSpaces--
+                } else resLine += sepline[i] + " ".repeat(firstSpaces)
+            }
+            writer.write(resLine.trim())
+    } else {if (sepline.size == 1) writer.write(sepline[0])
+        if (sepline.size == 0) writer.write("")}
+        writer.newLine()
+    }
+writer.close()
 }
 
 /**
@@ -305,8 +331,8 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
-    var parcounter = 1
-    writer.write("<html><body>")
+    var parcounter = 0
+    writer.write("<html><body><p>")
     val glossary = mapOf(
         "**" to listOf("<b>", "</b>"),
         "~~" to listOf("<s>", "</s>"),
@@ -326,9 +352,17 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         return res
     }
     for (line in File(inputName).readLines()) {
+        if (line.isEmpty()) {
+            if (parcounter == 0) {
+                writer.write("</p><p>")
+            }
+            if (parcounter == 1) {
+                writer.write("<p></p>")
+            }
+        }
         if (line.trim().isNotEmpty()) {
             if (parcounter == 1) {
-                writer.write("<p>")
+                writer.appendLine("<p>")
                 parcounter--
             }
             var resline = line
@@ -337,10 +371,12 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
 
             writer.write(resline)
+
         } else if (parcounter == 0) {
-            writer.write("</p>")
+            writer.appendLine("</p>")
             parcounter++
         }
+
     }
     if (parcounter == 0) writer.write("</p>")
     else if (File(inputName).readText().trim().isEmpty()) writer.write("<p></p>")
@@ -512,6 +548,6 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+
 }
 
