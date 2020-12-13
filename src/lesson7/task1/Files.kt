@@ -593,7 +593,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             spaces = ""
         }
         writer.write("\n")
-        bands += "-".repeat(next.toString().length+1)
+        bands += "-".repeat(max(next.length+1, nextres.length))
         if (space1 < space2) {
         spaces = ""
         spaces += " ".repeat(space1)}
