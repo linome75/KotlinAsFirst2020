@@ -563,6 +563,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     for (i in 0..lhv.toString().length - 1) nums.add(lhv.toString()[i].toString())
     var nextres = ""
     val res = lhv / rhv;
+    if (res > 0){
     for (i in res.toString().indices) {
         var bands = ""
         var spaces = ""
@@ -602,10 +603,24 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         writer.write("\n")
         numcount++
         if (i == res.toString().length - 1) space2 += next.length + 1
+        writer.write("$spaces")
     }
     var spaces = ""
-    spaces = " ".repeat(space2 - residue.toString().length) + residue.toString()
-    writer.write("$spaces")
+    spaces = " ".repeat(abs(space2 - residue.toString().length)) + residue.toString()}
+    else {
+        var bands = ""
+        var spaces = ""
+        writer.write("-0")
+        spaces += " ".repeat(lhv.toString().length + 2)
+        writer.write("$spaces")
+        writer.write("$res")
+        writer.write("\n")
+        bands += "-".repeat(max(2, lhv.toString().length))
+        writer.write("$bands")
+        writer.write("\n ")
+        writer.write(residue.toString())
+    }
+
 
 
 
