@@ -568,7 +568,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         var spaces = ""
         if (i != 0 && numcount < nums.size) {
             nextres = (nextres.toInt() - next.toInt()).toString()
-            space1 += next.length + 1 - nextres.length
+            space1 = space2 + next.length + 1 - nextres.length
             nextres += nums[numcount]
             spaces += " ".repeat(space1)
             writer.write("$spaces")
@@ -579,7 +579,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 
         next = ((res.toString()[i].toInt() - 48) * rhv).toString()
         if (i != 0) {
-            space2 = space1 - abs(nextres.length - next.length - 1)
+            space2 = abs(space1 +nextres.length - next.length - 1)
             spaces += " ".repeat(space2)
             writer.write("$spaces")
         }
