@@ -592,6 +592,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             numcount = next.length - 1
             for (i in 0..numcount) nextres += nums[i]
             spaces = ""
+
         }
         writer.write("\n")
         bands += "-".repeat(max(next.length+1, nextres.length))
@@ -606,7 +607,10 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         writer.write("$spaces")
     }
     var spaces = ""
-    spaces = " ".repeat(abs(space2 - residue.toString().length)) + residue.toString()}
+    spaces = " ".repeat(abs(space2 - residue.toString().length)) + residue.toString()
+        writer.write("$spaces")
+        }
+
     else {
         var bands = ""
         var spaces = ""
