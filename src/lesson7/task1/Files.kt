@@ -594,6 +594,8 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         }
         writer.write("\n")
         bands += "-".repeat(next.toString().length+1)
+        spaces = ""
+        spaces += " ".repeat(space1)
         writer.write("$spaces")
         writer.write("$bands")
         writer.write("\n")
