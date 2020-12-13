@@ -236,17 +236,7 @@ Basic, Ruby, Swift.
         val result = File("temp.html").readText().replace(Regex("[\\s\\n\\t]"), "")
         val expected =
             """
-                    <html>
-                        <body>
-                            <p>
-                                Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
-                                Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
-                            </p>
-                            <p>
-                                Suspendisse <s>et elit in enim tempus iaculis</s>.
-                            </p>
-                        </body>
-                    </html>
+<html><body><p></p><p>_&#@<b>z:_5<s><i>o</i>rCG<i>Su</i>;</s>Te</b>P<b>w&cD<i>w+X</i>n!mYS</b>kvy9=1<i>]ad</i><i><b>g)skk_B</b>iM</i>(x0F=iZ4b<b>t@<i>RV<s>;h</s>K<s>\\.</s>0u#</i>J=5ZS_2;#SE\"1nv!<s>CtA<i>V</i>B#M]=`l<i>^I</i>p<i>LE+</i>8f</s>%nuO|[M<s>8d<i>va</i></s>o</b>R7#/ILMM<s>]6?</s>werx(2?HjjP%H;SB+8T]v<i>,i</i><s>#ah</s>J<s>(Bu<i>i@1]:!<b>O1${'$'}/L[R6@</b>j_3</i></s>##BE0}1fW[.^<i>X<s>fE=+vs7<b></b>M</s>6B:Bf:2</i><i>.i<b>R\"o</b>4\\</i>v5?</p></body></html>
                     """.trimIndent().replace(Regex("[\\s\\n\\t]"), "")
         assertEquals(expected, result)
 

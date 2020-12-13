@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import kotlin.math.abs
 import kotlin.math.max
 
 // Урок 7: работа с файлами
@@ -188,11 +189,13 @@ fun alignFileByWidth(inputName: String, outputName: String) {
                 } else resLine += sepline[i] + " ".repeat(firstSpaces)
             }
             writer.write(resLine.trim())
-    } else {if (sepline.size == 1) writer.write(sepline[0])
-        if (sepline.size == 0) writer.write("")}
+        } else {
+            if (sepline.size == 1) writer.write(sepline[0])
+            if (sepline.size == 0) writer.write("")
+        }
         writer.newLine()
     }
-writer.close()
+    writer.close()
 }
 
 /**
@@ -548,6 +551,62 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
+    val writer = File(outputName).bufferedWriter()
+    writer.write(" ${lhv.toString()} | ${rhv.toString()}")
+    writer.newLine()
+    var numcount = 0
+    var next = ""
+    var space1 = 0
+    var space2 = 0
+    val residue = lhv%rhv
+    val nums = mutableListOf<String>()
+    for (i in 0..lhv.toString().length - 1) nums.add(lhv.toString()[i].toString())
+    var nextres = ""
+    val res = lhv / rhv;
+    for (i in res.toString().indices) {
+        var bands = ""
+        var spaces = ""
+        if (i != 0 && numcount < nums.size) {
+            nextres = (nextres.toInt() - next.toInt()).toString()
+            space1 += next.length + 1 - nextres.length
+            nextres += nums[numcount]
+            spaces += " ".repeat(space1)
+            writer.write("$spaces")
+            writer.write("$nextres")
+            writer.write("\r")
+        }
+        spaces = ""
+        next = ((res.toString()[i].toInt() - 48) * rhv).toString()
+        if (i != 0) {
+            space2 = space1 - abs(nextres.length - next.length - 1)
+            spaces += " ".repeat(space2)
+            writer.write("$spaces")
+        }
+        writer.write("-$next")
+        if (i == 0) {
+            spaces += " ".repeat(lhv.toString().length + 3 - next.length)
+            writer.write("$spaces")
+            writer.write("$res")
+            numcount = next.length - 1
+            for (i in 0..numcount) nextres += nums[i]
+            spaces = ""
+        }
+        writer.write("\r")
+        bands += "-".repeat(next.toString().length+1)
+        writer.write("$spaces")
+        writer.write("$bands")
+        writer.write("\r")
+        numcount++
+        if (i == res.toString().length - 1) space2 += next.length + 1
+    }
+    var spaces = ""
+    spaces = " ".repeat(space2 - residue.toString().length) + residue.toString()
+    writer.write("$spaces")
+
+
+
+
+    writer.close()
 
 }
 
