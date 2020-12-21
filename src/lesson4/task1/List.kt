@@ -3,8 +3,6 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
-import lesson3.task1.digitNumber
-import lesson3.task1.minDivisor
 import java.lang.Math.pow
 import kotlin.math.sqrt
 
@@ -123,7 +121,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = sqrt(v.map { it * it }.sum())
+fun abs(v: List<Double>): Double = sqrt(v.sumBy { (it * it).toInt() }.toDouble())
 
 /**
  * Простая (2 балла)
@@ -141,11 +139,9 @@ fun mean(list: List<Double>): Double = if (list.isNotEmpty()) (list.sum()) / lis
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    if (list.isNotEmpty()) {
-        val mean = mean(list)
-        for (i in list.indices)
-            list[i] -= mean
-    }
+    val mean = mean(list)
+    for (i in list.indices)
+        list[i] -= mean
     return list
 }
 
@@ -189,10 +185,8 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    if (list.isNotEmpty()) {
-        for (i in 1 until list.size) {
-            list[i] += list[i - 1]
-        }
+    for (i in 1 until list.size) {
+        list[i] += list[i - 1]
     }
     return list
 }
@@ -204,7 +198,21 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
+fun factorize(n: Int): List<Int> {
+    var num = n
+    var i = 2
+    val result = mutableListOf<Int>()
+    while (num > 1 && i <= sqrt(n.toDouble()).toInt() + 1) {
+        while (num % i == 0) {
+            result.add(i)
+            num /= i
+        }
+        i ++
+    }
+    if (num > 1) result.add(num)
+    return (result)
+}
+
 
 /**
  * Сложная (4 балла)
@@ -213,17 +221,8 @@ fun factorize(n: Int): List<Int> = TODO()
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    var num = n
-    var i = 0
-    val result = mutableListOf<Int>()
-    while (num > 1) {
-        result[i] = minDivisor(num)
-        i++
-        num /= minDivisor(num)
-    }
-    return (result.joinToString(separator = "*"))
-}
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
+
 
 /**
  * Средняя (3 балла)
@@ -286,11 +285,7 @@ fun tr(n: Int, m: Int): String {
     val result = mutableListOf<String>()
     var num = n
     when (num) {
-        in 1..3 -> {
-            result.add(RomeNumbers[m - 1])
-            num -= 1
-            result.add(tr(num, m))
-        }
+        in 1..3 -> result.add(RomeNumbers[m - 1]).repeat(num)
         in 5..8 -> {
             result.add(RomeNumbers[m])
             num -= 5
