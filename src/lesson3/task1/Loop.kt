@@ -5,10 +5,7 @@ package lesson3.task1
 import lesson1.task1.sqr
 import java.lang.Math.pow
 import java.util.*
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sqrt
+import kotlin.math.*
 import kotlin.random.Random.Default.nextInt
 import kotlin.system.measureTimeMillis
 
@@ -120,12 +117,8 @@ fun fib(n: Int): Int {
  */
 fun minDivisor(n: Int): Int {
     if (n % 2 == 0) return 2
-    else {
-        for (m in 3..sqrt(n.toDouble()).toInt() step 2) {
-            if (n % m == 0) return m
-        }
-        return n
-    }
+    for (m in 3..sqrt(n.toDouble()).toInt() step 2) if (n % m == 0) return m
+    return n
 }
 
 /**
@@ -247,16 +240,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    var number = n
-    var count = 0
-    var result = 0
-    while (number != 0) {
-        result = (number % 10) + result * 10
-        number /= 10
-    }
-    return result == n
-}
+fun isPalindrome(n: Int): Boolean = (n == revert(n))
 
 /**
  * Средняя (3 балла)
@@ -317,9 +301,7 @@ fun squareSequenceDigit(n: Int): Int {
         number++
         count += digitNumber(number * number)
     }
-    var answer = number * number
-    for (i in 1..count - n) answer /= 10
-    return answer % 10
+    return (number * number / 10.0.pow(count - n).toInt() % 10)
 }
 
 /**
@@ -338,8 +320,6 @@ fun fibSequenceDigit(n: Int): Int {
         number++
         count += digitNumber(fib(number))
     }
-    var answer = fib(number)
-    for (i in 1..count - n) answer /= 10
-    return answer % 10
+    return (fib(number) / 10.0.pow(count - n).toInt() % 10)
 }
 
