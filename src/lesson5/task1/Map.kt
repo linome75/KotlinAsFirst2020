@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import java.lang.IllegalArgumentException
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -351,3 +353,64 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
     TODO()
 }
+
+
+/**
+
+ * В виде списка строк phones заданы номера телефонов, например:
+ * “4628091 Иванов”,
+ * “4631794 Петров”,
+ * “6409045 Волкова”,
+ * “7081356 Кошкина”
+ *
+ * Номера могут состоять только из цифр.
+ *
+ * Также задан префикс prefix номера, который начал набирать
+ * владелец телефона, например “46”.
+ *
+ * Вернуть фамилии, соответствующие этому префиксу
+ * (в данном случае -- Иванов, Петров, их номера начинаются с 46).
+ *
+ * Имя и тип результата функции предложить самостоятельно.
+
+ *
+
+ * Если входные аргументы являются некорректными,
+
+ * бросить IllegalArgumentException
+
+ *
+
+ * Кроме функции, следует написать тесты,
+
+ * подтверждающие её работоспособность.
+
+ */
+fun myFun(phones: List<String>, prefix: String): List<String> {
+    val phonesSepNames = mutableListOf<String>()
+    val reg = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя "
+    if (prefix.contains(Regex(""""\D"""))) throw IllegalArgumentException()
+    for (i in phones.indices) {
+        if (phones[i].split(" ")[0].contains(Regex("""\D"""))
+            || phones[i].split(" ").size != 3
+        )
+            throw IllegalArgumentException()
+        else {
+            val name = phones[i].split(" ")[1] + " " + phones[i].split(" ")[2]
+            for (k in name.indices)
+                if (name[k].toLowerCase() !in reg) throw IllegalArgumentException()
+            if (phones[i].split(" ")[0].startsWith(prefix))
+                phonesSepNames.add(name)
+        }
+    }
+    return phonesSepNames
+}
+
+
+
+
+
+
+
+
+

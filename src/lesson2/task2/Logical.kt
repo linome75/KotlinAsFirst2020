@@ -8,6 +8,8 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
 
+fun Boolean.toInt() = if (this) 1 else 0
+
 /**
  * Пример
  *
@@ -22,12 +24,7 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Четырехзначное число назовем счастливым, если сумма первых двух ее цифр равна сумме двух последних.
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
-fun isNumberHappy(number: Int): Boolean {
-    val sum1 = number / 100 % 10 + number / 1000
-    val sum2 = number % 10 + number / 10 % 10
-    if (sum1 == sum2) return true
-    else return false
-}
+fun isNumberHappy(number: Int): Boolean = (number / 100 % 10 + number / 1000 == number % 10 + number / 10 % 10)
 
 /**
  * Простая (2 балла)
@@ -36,12 +33,8 @@ fun isNumberHappy(number: Int): Boolean {
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    return when {
-        (x1 == x2) || (y1 == y2) || (abs(x1 - x2) == abs(y1 - y2)) -> true
-        else -> false
-    }
-}
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
+    (x1 == x2) || (y1 == y2) || (abs(x1 - x2) == abs(y1 - y2))
 
 
 /**
@@ -50,13 +43,10 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
  * Дан номер месяца (от 1 до 12 включительно) и год (положительный).
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
-fun daysInMonth(month: Int, year: Int): Int {
-    return when {
-        (((month in 1..7) && (month % 2 != 0)) || ((month in 8..12) && (month % 2 == 0))) -> 31
-        ((month == 2) && (year % 4 != 0)) || ((month == 2) && (year % 100 == 0) && (year % 400 != 0)) -> 28
-        month == 2 -> 29
-        else -> 30
-    }
+fun daysInMonth(month: Int, year: Int): Int = when (month) {
+    1, 3, 5, 7, 8, 10, 12 -> 31
+    2 -> 29 - ((year % 4 != 0) || (year % 100 == 0) && (year % 400 != 0)).toInt()
+    else -> 30
 }
 
 /**
@@ -82,16 +72,9 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    val MinHoleSize = min(r, s)
-    val MaxHoleSize = max(r, s)
-    val MinBrickSize = minOf(a, b, c)
-    val MidBrickSize = when (MinBrickSize) {
-        a -> min(b, c)
-        b -> min(a, c)
-        else -> min(a, b)
-    }
-    return when {
-        (MinBrickSize <= MinHoleSize) && (MidBrickSize <= MaxHoleSize) -> true
-        else -> false
-    }
+    val minHoleSize = min(r, s)
+    val maxHoleSize = max(r, s)
+    val minBrickSize = minOf(a, b, c)
+    val midBrickSize = a + b + c - minBrickSize - maxOf(a,b,c)
+    return ((minBrickSize <= minHoleSize) && (midBrickSize <= maxHoleSize))
 }

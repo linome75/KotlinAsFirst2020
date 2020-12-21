@@ -3,6 +3,7 @@ package lesson5.task1
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
+import java.lang.IllegalArgumentException
 
 class Tests {
     @Test
@@ -335,5 +336,17 @@ class Tests {
                 450
             )
         )
+    }
+
+
+    @Test
+    @Tag("8")
+    fun myFun() {
+        assertEquals(
+            listOf("Иван Иванов", "Петр Петров"),
+            myFun(listOf("465846 Иван Иванов", "485123 Вениамин Лесков", "465124 Петр Петров"), "46")
+        )
+
+
     }
 }

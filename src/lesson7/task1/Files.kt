@@ -5,6 +5,7 @@ package lesson7.task1
 import java.io.File
 import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.min
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -567,51 +568,14 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     for (i in res.toString().indices) {
         var bands = ""
         var spaces = ""
-        if (i != 0 && numcount < nums.size) {
-            nextres = (nextres.toInt() - next.toInt()).toString()
-            space1 = space2 + next.length + 1 - nextres.length
-            nextres += nums[numcount]
-            spaces += " ".repeat(space1)
-            writer.write("$spaces")
-            writer.write("$nextres")
-            writer.write("\n")
-            spaces = ""
-        }
-
-        next = ((res.toString()[i].toInt() - 48) * rhv).toString()
-        if (i != 0) {
-            space2 = abs(space1 +nextres.length - next.length - 1)
-            spaces += " ".repeat(space2)
-            writer.write("$spaces")
+        next = (res.toString()[i].toInt() * lhv - 48).toString()
+        if (i == 0) {
+            for (i in next.indices)
+        nextres += lhv.toString()[i]
         }
         writer.write("-$next")
-        if (i == 0) {
-            spaces += " ".repeat(lhv.toString().length + 3 - next.length)
-            writer.write("$spaces")
-            writer.write("$res")
-            numcount = next.length - 1
-            for (i in 0..numcount) nextres += nums[i]
-            spaces = ""
-
-        }
-        writer.write("\n")
-        bands += "-".repeat(max(next.length+1, nextres.length))
-        if (space1 < space2) {
-        spaces = ""
-        spaces += " ".repeat(space1)}
-        writer.write("$spaces")
-        writer.write("$bands")
-        writer.write("\n")
-        numcount++
-        if (i == res.toString().length - 1) space2 += next.length + 1
-        writer.write("$spaces")
-    }
-    var spaces = ""
-    spaces = " ".repeat(abs(space2 - residue.toString().length)) + residue.toString()
-        writer.write("$spaces")
-        }
-
-    else {
+    } }
+        else {
         var bands = ""
         var spaces = ""
         writer.write("-0")

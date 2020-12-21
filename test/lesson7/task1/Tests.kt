@@ -380,7 +380,7 @@ Basic, Ruby, Swift.
 
 
         test(
-            1,
+            100,
             1,
             """
               2 | 20
