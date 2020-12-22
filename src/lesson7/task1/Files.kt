@@ -2,6 +2,7 @@
 
 package lesson7.task1
 
+import lesson2.task2.toInt
 import java.io.File
 import kotlin.math.abs
 import kotlin.math.max
@@ -66,14 +67,13 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Подчёркивание в середине и/или в конце строк значения не имеет.
  */
 fun deleteMarked(inputName: String, outputName: String) {
-    val writer = File(outputName).bufferedWriter()
-    for (line in File(inputName).readLines()) {
-        if (!line.startsWith("_")) {
-            writer.write(line)
-            writer.newLine()
-        }
+    File(outputName).bufferedWriter().use {
+        for (line in File(inputName).readLines())
+            if (!line.startsWith("_")) {
+                it.write(line)
+                it.newLine()
+            }
     }
-    writer.close()
 }
 
 /**
@@ -87,15 +87,17 @@ fun deleteMarked(inputName: String, outputName: String) {
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
     val res = mutableMapOf<String, Int>()
-    for (key in substrings.toSet()) res[key] = 0
+    for (key in substrings) res[key] = 0
     for (line in File(inputName).readLines()) {
         for (key in substrings.toSet()) {
             var index = 0
-            var num = line.toLowerCase().indexOf(key.toLowerCase(), index)
+            val lineToLowerCase = line.toLowerCase()
+            val keyToLowerCase = key.toLowerCase()
+            var num = lineToLowerCase.indexOf(keyToLowerCase, index)
             while (num != -1) {
                 res[key] = res[key]!! + 1
                 index = num + 1
-                num = line.toLowerCase().indexOf(key.toLowerCase(), index)
+                num = lineToLowerCase.indexOf(keyToLowerCase, index)
             }
         }
     }
@@ -169,34 +171,37 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    val writer = File(outputName).bufferedWriter()
-    var longestLine = 0
-    for (line in File(inputName).readLines()) {
-        val sepline = line.trim().split(" ").filter { it.isNotEmpty() }
-        var lenLine = sepline.size - 1
-        for (i in sepline.indices) lenLine += sepline[i].length
-        longestLine = max(longestLine, lenLine)
-    }
-    for (line in File(inputName).readLines()) {
-        val sepline = line.trim().split(" ").filter { it.isNotEmpty() }
-        if (sepline.size > 1) {
-            val firstSpaces = (longestLine - sepline.joinToString(" ").length) / (sepline.size - 1) + 1
-            var secondSpaces = (longestLine - sepline.joinToString(" ").length) % (sepline.size - 1)
-            var resLine = ""
-            for (i in sepline.indices) {
-                if (secondSpaces > 0) {
-                    resLine += sepline[i] + " ".repeat(firstSpaces + 1)
-                    secondSpaces--
-                } else resLine += sepline[i] + " ".repeat(firstSpaces)
-            }
-            writer.write(resLine.trim())
-        } else {
-            if (sepline.size == 1) writer.write(sepline[0])
-            if (sepline.size == 0) writer.write("")
+    File(outputName).bufferedWriter().use {
+        var longestLine = 0
+        val fileLines = mutableListOf<List<String>>()
+        for (line in File(inputName).readLines()) {
+            val sepline = line.trim().split(" ").filter { it.isNotEmpty() }
+            var lenLine = sepline.size - 1
+            fileLines.add(sepline)
+            for (i in sepline.indices) lenLine += sepline[i].length
+            longestLine = max(longestLine, lenLine)
         }
-        writer.newLine()
+        for (line in fileLines.indices) {
+            val lineSize = fileLines[line].size
+            val lineLength = fileLines[line].joinToString(" ").length
+            if (lineSize > 1) {
+                val firstSpaces = (longestLine - lineLength) / (lineSize - 1) + 1
+                var secondSpaces = (longestLine - lineLength) % (lineSize - 1)
+                var resLine = ""
+                for (i in fileLines[line].indices) {
+                    if (secondSpaces > 0) {
+                        resLine += fileLines[line][i] + " ".repeat(firstSpaces + 1)
+                        secondSpaces--
+                    } else resLine += fileLines[line][i] + " ".repeat(firstSpaces)
+                }
+                it.write(resLine.trim())
+            } else {
+                if (lineSize == 1) it.write(fileLines[line][0])
+                if (lineSize == 0) it.write("")
+            }
+            it.newLine()
+        }
     }
-    writer.close()
 }
 
 /**
@@ -335,39 +340,39 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
-    var parcounter = 0
+    var parcounter = false
     writer.write("<html><body><p>")
     val glossary = mapOf(
         "**" to listOf("<b>", "</b>"),
         "~~" to listOf("<s>", "</s>"),
         "*" to listOf("<i>", "</i>")
     )
-    val glsCount = mutableMapOf<String, Int>()
-    for (key in glossary.keys) glsCount[key] = 0
+    val glsCount = mutableMapOf<String, Boolean>()
+    for (key in glossary.keys) glsCount[key] = false
     fun corrector(seplines: List<String>, substitute: String): String {
         var res = seplines[0]
         for (i in 1..seplines.size - 1) {
-            res += glossary[substitute]!![glsCount[substitute]!!]
+            res += glossary[substitute]!![glsCount[substitute]!!.toInt()]
             res += seplines[i]
-            if (glsCount[substitute]!! == 0)
-                glsCount[substitute] = 1
-            else glsCount[substitute] = 0
+            if (glsCount[substitute] == false)
+                glsCount[substitute] = true
+            else glsCount[substitute] = false
         }
         return res
     }
     for (line in File(inputName).readLines()) {
         if (line.isEmpty()) {
-            if (parcounter == 0) {
+            if (!parcounter) {
                 writer.write("</p><p>")
             }
-            if (parcounter == 1) {
+            if (parcounter) {
                 writer.write("<p></p>")
             }
         }
         if (line.trim().isNotEmpty()) {
-            if (parcounter == 1) {
+            if (parcounter) {
                 writer.appendLine("<p>")
-                parcounter--
+                parcounter = false
             }
             var resline = line
             for (key in glossary.keys) {
@@ -376,13 +381,13 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 
             writer.write(resline)
 
-        } else if (parcounter == 0) {
+        } else if (!parcounter) {
             writer.appendLine("</p>")
-            parcounter++
+            parcounter = true
         }
 
     }
-    if (parcounter == 0) writer.write("</p>")
+    if (!parcounter) writer.write("</p>")
     else if (File(inputName).readText().trim().isEmpty()) writer.write("<p></p>")
     writer.write("</body></html>")
     writer.close()
@@ -559,23 +564,23 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     var next = ""
     var space1 = 0
     var space2 = 0
-    val residue = lhv%rhv
+    val residue = lhv % rhv
     val nums = mutableListOf<String>()
     for (i in 0..lhv.toString().length - 1) nums.add(lhv.toString()[i].toString())
     var nextres = ""
     val res = lhv / rhv;
-    if (res > 0){
-    for (i in res.toString().indices) {
-        var bands = ""
-        var spaces = ""
-        next = (res.toString()[i].toInt() * lhv - 48).toString()
-        if (i == 0) {
-            for (i in next.indices)
-        nextres += lhv.toString()[i]
+    if (res > 0) {
+        for (i in res.toString().indices) {
+            var bands = ""
+            var spaces = ""
+            next = (res.toString()[i].toInt() * lhv - 48).toString()
+            if (i == 0) {
+                for (i in next.indices)
+                    nextres += lhv.toString()[i]
+            }
+            writer.write("-$next")
         }
-        writer.write("-$next")
-    } }
-        else {
+    } else {
         var bands = ""
         var spaces = ""
         writer.write("-0")
