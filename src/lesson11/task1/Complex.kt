@@ -26,22 +26,41 @@ class Complex(val re: Double, val im: Double) {
     /**
      * Сложение.
      */
-    operator fun plus(other: Complex): Complex = TODO()
+    operator fun plus(other: Complex): Complex {
+        val res: Complex
+        res.re = other.re + re
+        res.im = other.im + im
+        return res
+    }
 
     /**
      * Смена знака (у обеих частей числа)
      */
-    operator fun unaryMinus(): Complex = TODO()
+    operator fun unaryMinus(): Complex {
+        val res: Complex
+        res.re = 0 - re
+        res.im = 0 - im
+        return res
+    }
 
     /**
      * Вычитание
      */
-    operator fun minus(other: Complex): Complex = TODO()
+    operator fun minus(other: Complex): Complex {
+        val res: Complex
+        res.re = re - other.re
+        res.im = im-other.im
+        return res
+    }
 
     /**
      * Умножение
      */
-    operator fun times(other: Complex): Complex = TODO()
+    operator fun times(other: Complex): Complex {
+        val res: Complex
+        res.re = re * other.re - im * other.im
+        res.im = im*other.re+re*other.im
+        return res}
 
     /**
      * Деление
