@@ -16,51 +16,35 @@ class Complex(val re: Double, val im: Double) {
     /**
      * Конструктор из вещественного числа
      */
-    constructor(x: Double) : this(TODO(), TODO())
+    constructor(x: Double) : this(x, 0.0)
 
     /**
      * Конструктор из строки вида x+yi
      */
-    constructor(s: String) : this(TODO(), TODO())
+    constructor(s: String) : this(
+        Regex("""([-]?[\d]*[\.]?[\d]*)([+-]?[\d]*[\.]?[\d]*)""").find(s)!!.groupValues[1].toDouble(),
+        Regex("""([-]?[\d]*[\.]?[\d]*)([+-]?[\d]*[\.]?[\d]*)""").find(s)!!.groupValues[2].toDouble()
+    )
 
     /**
      * Сложение.
      */
-    operator fun plus(other: Complex): Complex {
-        val res: Complex
-        res.re = other.re + re
-        res.im = other.im + im
-        return res
-    }
+    operator fun plus(other: Complex): Complex = Complex(other.re + re, other.im + im)
 
     /**
      * Смена знака (у обеих частей числа)
      */
-    operator fun unaryMinus(): Complex {
-        val res: Complex
-        res.re = 0 - re
-        res.im = 0 - im
-        return res
-    }
+    operator fun unaryMinus(): Complex = Complex(-re, -im)
 
     /**
      * Вычитание
      */
-    operator fun minus(other: Complex): Complex {
-        val res: Complex
-        res.re = re - other.re
-        res.im = im-other.im
-        return res
-    }
+    operator fun minus(other: Complex): Complex = Complex(re - other.re, im - other.im)
 
     /**
      * Умножение
      */
-    operator fun times(other: Complex): Complex {
-        val res: Complex
-        res.re = re * other.re - im * other.im
-        res.im = im*other.re+re*other.im
-        return res}
+    operator fun times(other: Complex): Complex = Complex(re * other.re - im * other.im, im * other.re + re * other.im)
 
     /**
      * Деление
