@@ -2,6 +2,13 @@
 
 package lesson11.task1
 
+
+import lesson2.task2.toInt
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.pow
+import kotlin.math.roundToInt
+
 /**
  * Класс "вещественное число с фиксированной точкой"
  *
@@ -16,11 +23,13 @@ package lesson11.task1
  * (в виде строки, целого числа, двух целых чисел и т.д.).
  * Представление числа должно позволять хранить числа с общим числом десятичных цифр не менее 9.
  */
-class FixedPointNumber : Comparable<FixedPointNumber> {
+class FixedPointNumber(num: Double, prec: Int) : Comparable<FixedPointNumber> {
     /**
      * Точность - число десятичных цифр после запятой.
      */
-    val precision: Int get() = TODO()
+    val precision: Int = prec
+    private val number: Double = num
+
 
     /**
      * Конструктор из строки, точность выбирается в соответствии
@@ -30,23 +39,22 @@ class FixedPointNumber : Comparable<FixedPointNumber> {
      *
      * Внимание: этот или другой конструктор можно сделать основным
      */
-    constructor(s: String) {
-        TODO()
-    }
+    constructor(s: String) : this(
+        s.toDouble(),
+        if (s.contains("."))
+            s.length - s.indexOf(".") - 1
+        else 0
+    )
 
     /**
      * Конструктор из вещественного числа с заданной точностью
      */
-    constructor(d: Double, p: Int) {
-        TODO()
-    }
+    //constructor(d: Double, p: Int) : this(d, p)
 
     /**
      * Конструктор из целого числа (предполагает нулевую точность)
      */
-    constructor(i: Int) {
-        TODO()
-    }
+    constructor(i: Int) : this(i.toDouble(), 0)
 
     /**
      * Сложение.
@@ -55,45 +63,70 @@ class FixedPointNumber : Comparable<FixedPointNumber> {
      * точность результата выбирается как наибольшая точность аргументов.
      * Лишние знаки отрбрасываются, число округляется по правилам арифметики.
      */
-    operator fun plus(other: FixedPointNumber): FixedPointNumber = TODO()
+    operator fun plus(other: FixedPointNumber): FixedPointNumber =
+        FixedPointNumber(this.number + other.number, max(this.precision, other.precision))
 
     /**
      * Смена знака
      */
-    operator fun unaryMinus(): FixedPointNumber = TODO()
+    operator fun unaryMinus(): FixedPointNumber = FixedPointNumber(-this.number, this.precision)
 
     /**
      * Вычитание
      */
-    operator fun minus(other: FixedPointNumber): FixedPointNumber = TODO()
+    operator fun minus(other: FixedPointNumber): FixedPointNumber =
+        FixedPointNumber(this.number - other.number, max(this.precision, other.precision))
 
     /**
      * Умножение
      */
-    operator fun times(other: FixedPointNumber): FixedPointNumber = TODO()
+    operator fun times(other: FixedPointNumber): FixedPointNumber {
+        val simpleMultiple = (this.number * other.number)
+        val beforeDot = simpleMultiple - simpleMultiple%1.0
+        val herePrec = max(this.precision, other.precision)
+        var afterDot = ((simpleMultiple-beforeDot)*10.0.pow(herePrec)).roundToInt()/10.0.pow(herePrec)
+        return FixedPointNumber(beforeDot + afterDot, herePrec)
+    }
 
     /**
      * Деление
      */
-    operator fun div(other: FixedPointNumber): FixedPointNumber = TODO()
+    operator fun div(other: FixedPointNumber): FixedPointNumber {
+        val simpleDiv = (this.number / other.number)
+        val beforeDot = simpleDiv - simpleDiv%1.0
+        val herePrec = min(this.precision, other.precision)
+        var afterDot = ((simpleDiv-beforeDot)*10.0.pow(herePrec)).roundToInt()/10.0.pow(herePrec)
+        return FixedPointNumber(beforeDot + afterDot, herePrec)
+    }
 
     /**
      * Сравнение на равенство
      */
-    override fun equals(other: Any?): Boolean = TODO()
+    override fun equals(other: Any?): Boolean =
+        (other is FixedPointNumber && this.number == other.number && this.precision == other.precision)
 
     /**
      * Сравнение на больше/меньше
      */
-    override fun compareTo(other: FixedPointNumber): Int = TODO()
+    override fun compareTo(other: FixedPointNumber): Int = when {
+        this.number - other.number >= 0.1.pow(precision) -> 1
+        this.number - other.number <= 0.1.pow(precision) -> -1
+        else -> 0
+    }
 
     /**
      * Преобразование в строку
      */
-    override fun toString(): String = TODO()
+    override fun toString(): String = this.number.toString()
 
     /**
      * Преобразование к вещественному числу
      */
-    fun toDouble(): Double = TODO()
+    fun toDouble(): Double = this.number
+    override fun hashCode(): Int {
+        var result = precision
+        result = 31 * result + number.hashCode()
+        return result
+    }
 }
+

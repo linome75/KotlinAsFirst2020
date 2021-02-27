@@ -111,9 +111,9 @@ class PhoneBook {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is PhoneBook) return false
-        for ((key,value) in  PhBook)
+        for ((key, value) in PhBook)
             if (value != other.PhBook.getValue(key)) return false
-    return true
+        return true
     }
 
     override fun hashCode(): Int {
