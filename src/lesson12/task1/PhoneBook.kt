@@ -24,13 +24,18 @@ class PhoneBook {
     private fun addSmTh(name: String, phone: String): Boolean {
         val PhToMtbList = listOf(phone)
         if ((name != "") && (phone == "") && name !in PhBook) {
-            PhBook[name] = PhToMtbList.toMutableList()
+            PhBook.put(name, PhToMtbList.toMutableList())
             return true
         }
-        return if ((name != "") && (phone != "") && (name in PhBook) && phone !in PhBook.values) {
-            PhBook[name] = PhToMtbList.toMutableList()
-            true
-        } else false
+        println(PhBook.values)
+        if ((name != "") && (phone != "") && (name in PhBook)) {
+            for (names in PhBook.keys) {
+            if (PhBook[names]!!.contains(phone)) return false
+            }
+            PhBook[name]!!.add(phone)
+            return true
+        }
+        return false
     }
 
     /**
@@ -84,5 +89,7 @@ class PhoneBook {
      * Порядок людей / порядок телефонов в книге не должен иметь значения.
      */
     override fun equals(other: Any?): Boolean = TODO()
-    override fun hashCode(): Int = PhBook.hashCode()
+    override fun hashCode(): Int {
+        return PhBook.hashCode()
+    }
 }
