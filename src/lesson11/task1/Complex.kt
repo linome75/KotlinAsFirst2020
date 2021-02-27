@@ -24,8 +24,8 @@ class Complex(val re: Double, val im: Double) {
      * Конструктор из строки вида x+yi
      */
     constructor(s: String) : this(
-        Regex("""([-]?[\d]*[\.]?[\d]*)([+-]?[\d]*[\.]?[\d]*)""").find(s)!!.groupValues[1].toDouble(),
-        Regex("""([-]?[\d]*[\.]?[\d]*)([+-]?[\d]*[\.]?[\d]*)""").find(s)!!.groupValues[2].toDouble()
+        Regex("""([-]?[\d]*[.]?[\d]*)([+-]?[\d]*[.]?[\d]*)""").find(s)!!.groupValues[1].toDouble(),
+        Regex("""([-]?[\d]*[.]?[\d]*)([+-]?[\d]*[.]?[\d]*)""").find(s)!!.groupValues[2].toDouble()
     )
 
     /**
@@ -66,7 +66,7 @@ class Complex(val re: Double, val im: Double) {
      */
     override fun toString(): String =
         when {
-            re != 0.0 && im == 0.0 -> ("${re}")
+            re != 0.0 && im == 0.0 -> ("$re")
             re != 0.0 && im > 0.0 -> ("${re}+${im}i")
             re != 0.0 && im < 0.0 -> ("${re}${im}i")
             else -> ("${im}i")
