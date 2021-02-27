@@ -18,23 +18,37 @@ package lesson12.task1
  * Класс должен иметь конструктор по умолчанию (без параметров).
  */
 class PhoneBook {
-    private var PhBook: MutableMap<String, MutableList<String>> = mutableMapOf()
+    private var PhBook: MutableMap<String, MutableSet<String>> = mutableMapOf()
 
 
     private fun addSmTh(name: String, phone: String): Boolean {
-        val PhToMtbList = listOf(phone)
         if ((name != "") && (phone == "") && name !in PhBook) {
-            PhBook.put(name, PhToMtbList.toMutableList())
+            PhBook.put(name, mutableSetOf(phone))
+            PhBook[name]!!.clear()
             return true
         }
-        println(PhBook.values)
         if ((name != "") && (phone != "") && (name in PhBook)) {
             for (names in PhBook.keys) {
-            if (PhBook[names]!!.contains(phone)) return false
+                if (phone in PhBook[names]!!) return false
             }
             PhBook[name]!!.add(phone)
             return true
         }
+        return false
+    }
+
+    private fun rmvSmTh(name: String, phone: String): Boolean {
+        if (name != "" && name in PhBook) {
+            PhBook.remove(name)
+            return true
+        }
+        if (phone != "")
+            for (names in PhBook.keys) {
+                if (phone in PhBook[names]!!) {
+                    PhBook.remove(names)
+                    return true
+                }
+            }
         return false
     }
 
@@ -52,7 +66,7 @@ class PhoneBook {
      * и false, если человек с таким именем отсутствовал в телефонной книге
      * (во втором случае телефонная книга не должна меняться).
      */
-    fun removeHuman(name: String): Boolean = TODO()
+    fun removeHuman(name: String): Boolean = rmvSmTh(name, "")
 
     /**
      * Добавить номер телефона.
@@ -69,27 +83,41 @@ class PhoneBook {
      * и false, если человек с таким именем отсутствовал в телефонной книге
      * либо у него не было такого номера телефона.
      */
-    fun removePhone(name: String, phone: String): Boolean = TODO()
+    fun removePhone(name: String, phone: String): Boolean = rmvSmTh("", phone)
 
     /**
      * Вернуть все номера телефона заданного человека.
      * Если этого человека нет в книге, вернуть пустой список
      */
-    fun phones(name: String): Set<String> = TODO()
+    fun phones(name: String): Set<String> {
+        return if (name in PhBook.keys) PhBook[name]!!
+        else setOf()
+    }
 
     /**
      * Вернуть имя человека по заданному номеру телефона.
      * Если такого номера нет в книге, вернуть null.
      */
-    fun humanByPhone(phone: String): String? = TODO()
+    fun humanByPhone(phone: String): String? {
+        for (names in PhBook.keys) if (phone in PhBook[names]!!) return names
+        return null
+    }
 
     /**
      * Две телефонные книги равны, если в них хранится одинаковый набор людей,
      * и каждому человеку соответствует одинаковый набор телефонов.
      * Порядок людей / порядок телефонов в книге не должен иметь значения.
      */
-    override fun equals(other: Any?): Boolean = TODO()
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is PhoneBook) return false
+        for ((key,value) in  PhBook)
+            if (value != other.PhBook.getValue(key)) return false
+    return true
+    }
+
     override fun hashCode(): Int {
         return PhBook.hashCode()
     }
 }
+
