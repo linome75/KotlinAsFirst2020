@@ -18,9 +18,9 @@ package lesson12.task1
  * Класс должен иметь конструктор по умолчанию (без параметров).
  */
 class PhoneBook {
-    var PhBook: MutableMap<String?, MutableList<String?>>
+    var PhBook: MutableMap<String?, MutableList<String?>> = mutableMapOf()
         get() {
-            return PhBook
+            return field
         }
         set(value: MutableMap<String?, MutableList<String?>>) {}
 
