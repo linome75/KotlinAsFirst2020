@@ -72,4 +72,10 @@ class Complex(val re: Double, val im: Double) {
             else -> ("${im}i")
         }
 
+    override fun hashCode(): Int {
+        var result = re.hashCode()
+        result = 31 * result + im.hashCode()
+        return result
+    }
+
 }
