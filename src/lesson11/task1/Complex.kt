@@ -2,6 +2,8 @@
 
 package lesson11.task1
 
+import lesson1.task1.sqr
+
 /**
  * Класс "комплексное число".
  *
@@ -49,15 +51,25 @@ class Complex(val re: Double, val im: Double) {
     /**
      * Деление
      */
-    operator fun div(other: Complex): Complex = TODO()
+    operator fun div(other: Complex): Complex = Complex(
+        (re * other.re + im * other.im) / (sqr(other.re) + sqr(other.im)),
+        (other.re * im - re * other.im) / (sqr(other.re) + sqr(other.im))
+    )
 
     /**
      * Сравнение на равенство
      */
-    override fun equals(other: Any?): Boolean = TODO()
+    override fun equals(other: Any?): Boolean = (other is Complex) && (re == other.re) && (im == other.im)
 
     /**
      * Преобразование в строку
      */
-    override fun toString(): String = TODO()
+    override fun toString(): String =
+        when {
+            re != 0.0 && im == 0.0 -> ("${re}")
+            re != 0.0 && im > 0.0 -> ("${re}+${im}i")
+            re != 0.0 && im < 0.0 -> ("${re}${im}i")
+            else -> ("${im}i")
+        }
+
 }
