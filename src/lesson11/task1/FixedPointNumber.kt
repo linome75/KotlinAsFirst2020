@@ -3,7 +3,7 @@
 package lesson11.task1
 
 
-import lesson2.task2.toInt
+
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
@@ -82,9 +82,9 @@ class FixedPointNumber(num: Double, prec: Int) : Comparable<FixedPointNumber> {
      */
     operator fun times(other: FixedPointNumber): FixedPointNumber {
         val simpleMultiple = (this.number * other.number)
-        val beforeDot = simpleMultiple - simpleMultiple%1.0
+        val beforeDot = simpleMultiple - simpleMultiple % 1.0
         val herePrec = max(this.precision, other.precision)
-        var afterDot = ((simpleMultiple-beforeDot)*10.0.pow(herePrec)).roundToInt()/10.0.pow(herePrec)
+        val afterDot = ((simpleMultiple - beforeDot) * 10.0.pow(herePrec)).roundToInt() / 10.0.pow(herePrec)
         return FixedPointNumber(beforeDot + afterDot, herePrec)
     }
 
@@ -93,9 +93,9 @@ class FixedPointNumber(num: Double, prec: Int) : Comparable<FixedPointNumber> {
      */
     operator fun div(other: FixedPointNumber): FixedPointNumber {
         val simpleDiv = (this.number / other.number)
-        val beforeDot = simpleDiv - simpleDiv%1.0
+        val beforeDot = simpleDiv - simpleDiv % 1.0
         val herePrec = min(this.precision, other.precision)
-        var afterDot = ((simpleDiv-beforeDot)*10.0.pow(herePrec)).roundToInt()/10.0.pow(herePrec)
+        val afterDot = ((simpleDiv - beforeDot) * 10.0.pow(herePrec)).roundToInt() / 10.0.pow(herePrec)
         return FixedPointNumber(beforeDot + afterDot, herePrec)
     }
 
