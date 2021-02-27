@@ -18,24 +18,19 @@ package lesson12.task1
  * Класс должен иметь конструктор по умолчанию (без параметров).
  */
 class PhoneBook {
-    var PhBook: MutableMap<String?, MutableList<String?>> = mutableMapOf()
-        get() {
-            return field
-        }
-        set(value: MutableMap<String?, MutableList<String?>>) {}
+    private var PhBook: MutableMap<String, MutableList<String>> = mutableMapOf()
 
 
     private fun addSmTh(name: String, phone: String): Boolean {
         val PhToMtbList = listOf(phone)
-    if ((name != "") && (phone == "") && !(name in PhBook)) {
-        PhBook.put(name, PhToMtbList.toMutableList())
-        return true
-    }
-    if ((name != "") && (phone != "") && (name in PhBook) && phone !in PhBook.values!!) {
-        PhBook.put(name, PhToMtbList.toMutableList())
-        return true
-    }
-        else return false
+        if ((name != "") && (phone == "") && name !in PhBook) {
+            PhBook[name] = PhToMtbList.toMutableList()
+            return true
+        }
+        return if ((name != "") && (phone != "") && (name in PhBook) && phone !in PhBook.values) {
+            PhBook[name] = PhToMtbList.toMutableList()
+            true
+        } else false
     }
 
     /**
@@ -89,4 +84,5 @@ class PhoneBook {
      * Порядок людей / порядок телефонов в книге не должен иметь значения.
      */
     override fun equals(other: Any?): Boolean = TODO()
+    override fun hashCode(): Int = PhBook.hashCode()
 }
