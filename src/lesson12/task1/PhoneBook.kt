@@ -18,13 +18,33 @@ package lesson12.task1
  * Класс должен иметь конструктор по умолчанию (без параметров).
  */
 class PhoneBook {
+    var PhBook: MutableMap<String?, MutableList<String?>>
+        get() {
+            return PhBook
+        }
+        set(value: MutableMap<String?, MutableList<String?>>) {}
+
+
+    private fun addSmTh(name: String, phone: String): Boolean {
+        val PhToMtbList = listOf(phone)
+    if ((name != "") && (phone == "") && !(name in PhBook)) {
+        PhBook.put(name, PhToMtbList.toMutableList())
+        return true
+    }
+    if ((name != "") && (phone != "") && (name in PhBook) && phone !in PhBook.values!!) {
+        PhBook.put(name, PhToMtbList.toMutableList())
+        return true
+    }
+        else return false
+    }
+
     /**
      * Добавить человека.
      * Возвращает true, если человек был успешно добавлен,
      * и false, если человек с таким именем уже был в телефонной книге
      * (во втором случае телефонная книга не должна меняться).
      */
-    fun addHuman(name: String): Boolean = TODO()
+    fun addHuman(name: String): Boolean = addSmTh(name, "")
 
     /**
      * Убрать человека.
@@ -41,7 +61,7 @@ class PhoneBook {
      * либо у него уже был такой номер телефона,
      * либо такой номер телефона зарегистрирован за другим человеком.
      */
-    fun addPhone(name: String, phone: String): Boolean = TODO()
+    fun addPhone(name: String, phone: String): Boolean = addSmTh(name, phone)
 
     /**
      * Убрать номер телефона.
