@@ -18,7 +18,7 @@ package lesson12.task1
  * Класс должен иметь конструктор по умолчанию (без параметров).
  */
 class PhoneBook {
-    private var PhBook: MutableMap<String, MutableSet<String>> = mutableMapOf()
+    private var phBook: MutableMap<String, MutableSet<String>> = mutableMapOf()
 
     /**
      * Добавить человека.
@@ -27,8 +27,8 @@ class PhoneBook {
      * (во втором случае телефонная книга не должна меняться).
      */
     fun addHuman(name: String): Boolean {
-        if (name !in PhBook) {
-            PhBook.put(name, mutableSetOf())
+        if (name !in phBook) {
+            phBook[name] = mutableSetOf()
             return true
         }
         return false
@@ -41,8 +41,8 @@ class PhoneBook {
      * (во втором случае телефонная книга не должна меняться).
      */
     fun removeHuman(name: String): Boolean {
-        if (name != "" && name in PhBook) {
-            PhBook.remove(name)
+        if (name != "" && name in phBook) {
+            phBook.remove(name)
             return true
         }
         return false
@@ -56,11 +56,11 @@ class PhoneBook {
      * либо такой номер телефона зарегистрирован за другим человеком.
      */
     fun addPhone(name: String, phone: String): Boolean {
-        if (name in PhBook) {
-            for (names in PhBook.keys) {
-                if (phone in PhBook[names]!!) return false
+        if (name in phBook) {
+            for ((key, value) in phBook) {
+                if (phone in value) return false
             }
-            PhBook[name]!!.add(phone)
+            phBook[name]!!.add(phone)
             return true
         }
         return false
@@ -74,9 +74,9 @@ class PhoneBook {
      */
     fun removePhone(name: String, phone: String): Boolean {
         if (phone != "")
-            for (names in PhBook.keys) {
-                if (phone in PhBook[names]!!) {
-                    PhBook.remove(names)
+            for (names in phBook.keys) {
+                if (phone in phBook[names]!!) {
+                    phBook.remove(names)
                     return true
                 }
             }
@@ -87,17 +87,15 @@ class PhoneBook {
      * Вернуть все номера телефона заданного человека.
      * Если этого человека нет в книге, вернуть пустой список
      */
-    fun phones(name: String): Set<String> {
-        return if (name in PhBook.keys) PhBook[name]!!
-        else setOf()
-    }
+    fun phones(name: String): Set<String> = phBook[name] ?: setOf()
+
 
     /**
      * Вернуть имя человека по заданному номеру телефона.
      * Если такого номера нет в книге, вернуть null.
      */
     fun humanByPhone(phone: String): String? {
-        for (names in PhBook.keys) if (phone in PhBook[names]!!) return names
+        for ((key, value) in phBook) if (phone in value) return key
         return null
     }
 
@@ -106,16 +104,8 @@ class PhoneBook {
      * и каждому человеку соответствует одинаковый набор телефонов.
      * Порядок людей / порядок телефонов в книге не должен иметь значения.
      */
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is PhoneBook) return false
-        for ((key, value) in PhBook)
-            if (value != other.PhBook.getValue(key)) return false
-        return true
-    }
+    override fun equals(other: Any?): Boolean = ((this === other) || ((other is PhoneBook) && (phBook == other.phBook)))
 
-    override fun hashCode(): Int {
-        return PhBook.hashCode()
-    }
+    override fun hashCode(): Int = phBook.hashCode()
 }
 

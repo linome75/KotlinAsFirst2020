@@ -24,6 +24,7 @@ import kotlin.math.roundToInt
  * (в виде строки, целого числа, двух целых чисел и т.д.).
  * Представление числа должно позволять хранить числа с общим числом десятичных цифр не менее 9.
  */
+/**
 class FixedPointNumber(num: String, prec: Int) : Comparable<FixedPointNumber> {
     /**
      * Точность - число десятичных цифр после запятой.
@@ -144,3 +145,4 @@ class FixedPointNumber(num: String, prec: Int) : Comparable<FixedPointNumber> {
     }
 }
 
+*/
