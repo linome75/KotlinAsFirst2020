@@ -3,11 +3,12 @@
 package lesson11.task1
 
 
-
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.roundToInt
+
+
 
 /**
  * Класс "вещественное число с фиксированной точкой"
@@ -23,14 +24,27 @@ import kotlin.math.roundToInt
  * (в виде строки, целого числа, двух целых чисел и т.д.).
  * Представление числа должно позволять хранить числа с общим числом десятичных цифр не менее 9.
  */
-class FixedPointNumber(num: Double, prec: Int) : Comparable<FixedPointNumber> {
+class FixedPointNumber(num: String, prec: Int) : Comparable<FixedPointNumber> {
     /**
      * Точность - число десятичных цифр после запятой.
      */
     val precision: Int = prec
-    private val number: Double = num
-
-
+    private val number = num
+    private val dotAdress = number.indexOf(".")
+    private fun beforeDot(s: String): List<Byte> {
+        val res = mutableListOf<Byte>()
+        for (k in 0 until dotAdress) {
+            res += s[k].toByte()
+        }
+        return res
+    }
+    private fun afterDot(s: String, prec:Int) : List<Byte> {
+        val res = mutableListOf<Byte>()
+        for (k in dotAdress until dotAdress + prec) {
+            res += s[k].toByte()
+        }
+        return res
+    }
     /**
      * Конструктор из строки, точность выбирается в соответствии
      * с числом цифр после десятичной точки.
@@ -40,7 +54,7 @@ class FixedPointNumber(num: Double, prec: Int) : Comparable<FixedPointNumber> {
      * Внимание: этот или другой конструктор можно сделать основным
      */
     constructor(s: String) : this(
-        s.toDouble(),
+        s,
         if (s.contains("."))
             s.length - s.indexOf(".") - 1
         else 0
@@ -49,12 +63,12 @@ class FixedPointNumber(num: Double, prec: Int) : Comparable<FixedPointNumber> {
     /**
      * Конструктор из вещественного числа с заданной точностью
      */
-    //constructor(d: Double, p: Int) : this(d, p)
+    constructor(d: Double, p: Int) : this(d.toString(), p)
 
     /**
      * Конструктор из целого числа (предполагает нулевую точность)
      */
-    constructor(i: Int) : this(i.toDouble(), 0)
+    constructor(i: Int) : this(i.toString(), 0)
 
     /**
      * Сложение.

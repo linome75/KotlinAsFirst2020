@@ -20,14 +20,43 @@ package lesson12.task1
 class PhoneBook {
     private var PhBook: MutableMap<String, MutableSet<String>> = mutableMapOf()
 
-
-    private fun addSmTh(name: String, phone: String): Boolean {
-        if ((name != "") && (phone == "") && name !in PhBook) {
-            PhBook.put(name, mutableSetOf(phone))
-            PhBook[name]!!.clear()
+    /**
+     * Добавить человека.
+     * Возвращает true, если человек был успешно добавлен,
+     * и false, если человек с таким именем уже был в телефонной книге
+     * (во втором случае телефонная книга не должна меняться).
+     */
+    fun addHuman(name: String): Boolean {
+        if (name !in PhBook) {
+            PhBook.put(name, mutableSetOf())
             return true
         }
-        if ((name != "") && (phone != "") && (name in PhBook)) {
+        return false
+    }
+
+    /**
+     * Убрать человека.
+     * Возвращает true, если человек был успешно удалён,
+     * и false, если человек с таким именем отсутствовал в телефонной книге
+     * (во втором случае телефонная книга не должна меняться).
+     */
+    fun removeHuman(name: String): Boolean {
+        if (name != "" && name in PhBook) {
+            PhBook.remove(name)
+            return true
+        }
+        return false
+    }
+
+    /**
+     * Добавить номер телефона.
+     * Возвращает true, если номер был успешно добавлен,
+     * и false, если человек с таким именем отсутствовал в телефонной книге,
+     * либо у него уже был такой номер телефона,
+     * либо такой номер телефона зарегистрирован за другим человеком.
+     */
+    fun addPhone(name: String, phone: String): Boolean {
+        if (name in PhBook) {
             for (names in PhBook.keys) {
                 if (phone in PhBook[names]!!) return false
             }
@@ -37,11 +66,13 @@ class PhoneBook {
         return false
     }
 
-    private fun rmvSmTh(name: String, phone: String): Boolean {
-        if (name != "" && name in PhBook) {
-            PhBook.remove(name)
-            return true
-        }
+    /**
+     * Убрать номер телефона.
+     * Возвращает true, если номер был успешно удалён,
+     * и false, если человек с таким именем отсутствовал в телефонной книге
+     * либо у него не было такого номера телефона.
+     */
+    fun removePhone(name: String, phone: String): Boolean {
         if (phone != "")
             for (names in PhBook.keys) {
                 if (phone in PhBook[names]!!) {
@@ -51,39 +82,6 @@ class PhoneBook {
             }
         return false
     }
-
-    /**
-     * Добавить человека.
-     * Возвращает true, если человек был успешно добавлен,
-     * и false, если человек с таким именем уже был в телефонной книге
-     * (во втором случае телефонная книга не должна меняться).
-     */
-    fun addHuman(name: String): Boolean = addSmTh(name, "")
-
-    /**
-     * Убрать человека.
-     * Возвращает true, если человек был успешно удалён,
-     * и false, если человек с таким именем отсутствовал в телефонной книге
-     * (во втором случае телефонная книга не должна меняться).
-     */
-    fun removeHuman(name: String): Boolean = rmvSmTh(name, "")
-
-    /**
-     * Добавить номер телефона.
-     * Возвращает true, если номер был успешно добавлен,
-     * и false, если человек с таким именем отсутствовал в телефонной книге,
-     * либо у него уже был такой номер телефона,
-     * либо такой номер телефона зарегистрирован за другим человеком.
-     */
-    fun addPhone(name: String, phone: String): Boolean = addSmTh(name, phone)
-
-    /**
-     * Убрать номер телефона.
-     * Возвращает true, если номер был успешно удалён,
-     * и false, если человек с таким именем отсутствовал в телефонной книге
-     * либо у него не было такого номера телефона.
-     */
-    fun removePhone(name: String, phone: String): Boolean = rmvSmTh("", phone)
 
     /**
      * Вернуть все номера телефона заданного человека.
