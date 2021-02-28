@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Tag
-/**
+
 class FixedPointNumberTest {
 
     @Test
@@ -94,4 +94,3 @@ class FixedPointNumberTest {
         assertEquals(19.7532, x.toDouble(), 1e-5)
     }
 }
-        */

@@ -57,7 +57,7 @@ class PhoneBook {
      */
     fun addPhone(name: String, phone: String): Boolean {
         if (name in phBook) {
-            for ((key, value) in phBook) {
+            for ((_, value) in phBook) {
                 if (phone in value) return false
             }
             phBook[name]!!.add(phone)

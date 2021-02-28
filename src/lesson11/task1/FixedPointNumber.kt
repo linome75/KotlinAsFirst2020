@@ -3,11 +3,9 @@
 package lesson11.task1
 
 
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.pow
-import kotlin.math.roundToInt
-
+import java.math.BigDecimal
+import java.math.RoundingMode
+import kotlin.math.*
 
 
 /**
@@ -24,28 +22,15 @@ import kotlin.math.roundToInt
  * (в виде строки, целого числа, двух целых чисел и т.д.).
  * Представление числа должно позволять хранить числа с общим числом десятичных цифр не менее 9.
  */
-/**
-class FixedPointNumber(num: String, prec: Int) : Comparable<FixedPointNumber> {
+
+class FixedPointNumber(num: BigDecimal, prec: Int) : Comparable<FixedPointNumber> {
     /**
      * Точность - число десятичных цифр после запятой.
      */
     val precision: Int = prec
-    private val number = num
-    private val dotAdress = number.indexOf(".")
-    private fun beforeDot(s: String): List<Byte> {
-        val res = mutableListOf<Byte>()
-        for (k in 0 until dotAdress) {
-            res += s[k].toByte()
-        }
-        return res
-    }
-    private fun afterDot(s: String, prec:Int) : List<Byte> {
-        val res = mutableListOf<Byte>()
-        for (k in dotAdress until dotAdress + prec) {
-            res += s[k].toByte()
-        }
-        return res
-    }
+    private val number: BigDecimal = num
+
+
     /**
      * Конструктор из строки, точность выбирается в соответствии
      * с числом цифр после десятичной точки.
@@ -54,22 +39,17 @@ class FixedPointNumber(num: String, prec: Int) : Comparable<FixedPointNumber> {
      *
      * Внимание: этот или другой конструктор можно сделать основным
      */
-    constructor(s: String) : this(
-        s,
-        if (s.contains("."))
-            s.length - s.indexOf(".") - 1
-        else 0
-    )
+    constructor(s: String) : this(s.toBigDecimal(), s.split(".")[1].length)
 
     /**
      * Конструктор из вещественного числа с заданной точностью
      */
-    constructor(d: Double, p: Int) : this(d.toString(), p)
+    constructor(d: Double, p: Int) : this(d.toBigDecimal().setScale(p, RoundingMode.HALF_UP), p)
 
     /**
      * Конструктор из целого числа (предполагает нулевую точность)
      */
-    constructor(i: Int) : this(i.toString(), 0)
+    constructor(i: Int) : this(i.toDouble().toBigDecimal(), 0)
 
     /**
      * Сложение.
@@ -79,53 +59,45 @@ class FixedPointNumber(num: String, prec: Int) : Comparable<FixedPointNumber> {
      * Лишние знаки отрбрасываются, число округляется по правилам арифметики.
      */
     operator fun plus(other: FixedPointNumber): FixedPointNumber =
-        FixedPointNumber(this.number + other.number, max(this.precision, other.precision))
+        FixedPointNumber(this.number.add(other.number), max(this.precision, other.precision))
 
     /**
      * Смена знака
      */
-    operator fun unaryMinus(): FixedPointNumber = FixedPointNumber(-this.number, this.precision)
+    operator fun unaryMinus(): FixedPointNumber = FixedPointNumber(this.number.unaryMinus(), this.precision)
 
     /**
      * Вычитание
      */
     operator fun minus(other: FixedPointNumber): FixedPointNumber =
-        FixedPointNumber(this.number - other.number, max(this.precision, other.precision))
+        FixedPointNumber(this.number.minus(other.number), max(this.precision, other.precision))
 
     /**
      * Умножение
      */
-    operator fun times(other: FixedPointNumber): FixedPointNumber {
-        val simpleMultiple = (this.number * other.number)
-        val beforeDot = simpleMultiple - simpleMultiple % 1.0
-        val herePrec = max(this.precision, other.precision)
-        val afterDot = ((simpleMultiple - beforeDot) * 10.0.pow(herePrec)).roundToInt() / 10.0.pow(herePrec)
-        return FixedPointNumber(beforeDot + afterDot, herePrec)
-    }
+    operator fun times(other: FixedPointNumber): FixedPointNumber =
+        FixedPointNumber(this.number.times(other.number)
+            .setScale(max(this.precision, other.precision), RoundingMode.HALF_UP), max(this.precision, other.precision))
 
     /**
      * Деление
      */
-    operator fun div(other: FixedPointNumber): FixedPointNumber {
-        val simpleDiv = (this.number / other.number)
-        val beforeDot = simpleDiv - simpleDiv % 1.0
-        val herePrec = min(this.precision, other.precision)
-        val afterDot = ((simpleDiv - beforeDot) * 10.0.pow(herePrec)).roundToInt() / 10.0.pow(herePrec)
-        return FixedPointNumber(beforeDot + afterDot, herePrec)
-    }
+    operator fun div(other: FixedPointNumber): FixedPointNumber =
+        FixedPointNumber(this.number.div(other.number)
+            .setScale(min(this.precision, other.precision), RoundingMode.HALF_UP), min(this.precision, other.precision))
 
     /**
      * Сравнение на равенство
      */
     override fun equals(other: Any?): Boolean =
-        (other is FixedPointNumber && this.number == other.number && this.precision == other.precision)
+        (this === other || other is FixedPointNumber && this.number == other.number && this.precision == other.precision)
 
     /**
      * Сравнение на больше/меньше
      */
     override fun compareTo(other: FixedPointNumber): Int = when {
-        this.number - other.number >= 0.1.pow(precision) -> 1
-        this.number - other.number <= 0.1.pow(precision) -> -1
+        this.number > other.number -> 1
+        this.number < other.number -> -1
         else -> 0
     }
 
@@ -137,12 +109,10 @@ class FixedPointNumber(num: String, prec: Int) : Comparable<FixedPointNumber> {
     /**
      * Преобразование к вещественному числу
      */
-    fun toDouble(): Double = this.number
+    fun toDouble(): Double = this.number.toDouble()
     override fun hashCode(): Int {
         var result = precision
         result = 31 * result + number.hashCode()
         return result
     }
 }
-
-*/
