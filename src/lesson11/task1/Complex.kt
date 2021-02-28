@@ -4,6 +4,12 @@ package lesson11.task1
 
 import lesson1.task1.sqr
 
+val rightArg = Regex("""(-?\d+(?:\.\d+)?)([+-]\d+(?:\.\d+)?)i""")
+fun strToComplex(s: String, i: Int): Double {
+    val complexString = rightArg.matchEntire(s) ?: throw IllegalArgumentException()
+    return complexString.groupValues[i].toDouble()
+}
+
 /**
  * Класс "комплексное число".
  *
@@ -23,10 +29,9 @@ class Complex(val re: Double, val im: Double) {
     /**
      * Конструктор из строки вида x+yi
      */
-    constructor(s: String) : this(
-        Regex("""([-]?[\d]*[.]?[\d]*)([+-]?[\d]*[.]?[\d]*)""").find(s)!!.groupValues[1].toDouble(),
-        Regex("""([-]?[\d]*[.]?[\d]*)([+-]?[\d]*[.]?[\d]*)""").find(s)!!.groupValues[2].toDouble()
-    )
+
+
+    constructor(s: String) : this(strToComplex(s, 1), strToComplex(s, 2))
 
     /**
      * Сложение.
@@ -59,7 +64,10 @@ class Complex(val re: Double, val im: Double) {
     /**
      * Сравнение на равенство
      */
-    override fun equals(other: Any?): Boolean = (other is Complex) && (re == other.re) && (im == other.im)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        else return (other is Complex) && (re == other.re) && (im == other.im)
+    }
 
     /**
      * Преобразование в строку
@@ -67,9 +75,10 @@ class Complex(val re: Double, val im: Double) {
     override fun toString(): String =
         when {
             re != 0.0 && im == 0.0 -> ("$re")
+            re == 0.0 && im != 0.0 -> ("${im}i")
             re != 0.0 && im > 0.0 -> ("${re}+${im}i")
-            re != 0.0 && im < 0.0 -> ("${re}${im}i")
-            else -> ("${im}i")
+            re == 0.0 && im == 0.0 -> ("0.0")
+            else -> ("${re}${im}i")
         }
 
     override fun hashCode(): Int {
