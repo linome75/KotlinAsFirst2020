@@ -17,6 +17,7 @@ package lesson12.task1
  *
  * Класс должен иметь конструктор по умолчанию (без параметров).
  */
+@Suppress("TYPE_INFERENCE_ONLY_INPUT_TYPES_WARNING")
 class PhoneBook {
     private var phBook: MutableMap<String, MutableSet<String>> = mutableMapOf()
 
