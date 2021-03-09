@@ -57,7 +57,10 @@ class PhoneBook {
      * либо такой номер телефона зарегистрирован за другим человеком.
      */
     fun addPhone(name: String, phone: String): Boolean {
-        if (name in phBook && phone !in phBook.values) {
+        if (name in phBook && phBook[name] != null) {
+            for ((_, value) in phBook) {
+                if (phone in value) return false
+            }
             phBook[name]!!.add(phone)
             return true
         }
