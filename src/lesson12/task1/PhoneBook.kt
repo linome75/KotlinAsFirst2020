@@ -41,7 +41,7 @@ class PhoneBook {
      * (во втором случае телефонная книга не должна меняться).
      */
     fun removeHuman(name: String): Boolean {
-        if (name != "" && name in phBook) {
+        if (name in phBook) {
             phBook.remove(name)
             return true
         }
@@ -56,10 +56,7 @@ class PhoneBook {
      * либо такой номер телефона зарегистрирован за другим человеком.
      */
     fun addPhone(name: String, phone: String): Boolean {
-        if (name in phBook) {
-            for ((_, value) in phBook) {
-                if (phone in value) return false
-            }
+        if (name in phBook && phone !in phBook.values) {
             phBook[name]!!.add(phone)
             return true
         }
@@ -73,13 +70,10 @@ class PhoneBook {
      * либо у него не было такого номера телефона.
      */
     fun removePhone(name: String, phone: String): Boolean {
-        if (phone != "")
-            for (names in phBook.keys) {
-                if (phone in phBook[names]!!) {
-                    phBook.remove(names)
-                    return true
-                }
-            }
+        if (name in phBook.keys && phone in phBook[name]!!) {
+            phBook[name]!!.remove(phone)
+            return true
+        }
         return false
     }
 

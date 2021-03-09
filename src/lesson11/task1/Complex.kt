@@ -77,7 +77,6 @@ class Complex(val re: Double, val im: Double) {
             re != 0.0 && im == 0.0 -> ("$re")
             re == 0.0 && im != 0.0 -> ("${im}i")
             re != 0.0 && im > 0.0 -> ("${re}+${im}i")
-            re == 0.0 && im == 0.0 -> ("0.0")
             else -> ("${re}${im}i")
         }
 
